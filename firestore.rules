@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // === Admin Access ===
+    match /setCollection/{setId} {
+      allow read: if true;
+      allow write: if request.auth.uid == 'UKIeRQSd52YEL0dLYUIWl6S4coD2'; 
+    }
+
+    match /cardCollection/{cardId} {
+      allow read: if true; 
+      allow write: if request.auth.uid == 'UKIeRQSd52YEL0dLYUIWl6S4coD2'; 
+    }
+
+    // === Set Collection ===
+    match /setCollection/{setId} {
+      allow read: if true; 
+      allow write: if request.auth.uid == 'UKIeRQSd52YEL0dLYUIWl6S4coD2'; 
+    }
+
+    // === Card Collection ===
+    match /cardCollection/{cardId} {
+      allow read: if true; 
+      allow write: if request.auth.uid == 'UKIeRQSd52YEL0dLYUIWl6S4coD2';
+    }
+
+    // === Users Collection ===
+    match /users/{userId} {
+      // Allow Write for the user themselves OR your admin UID
+       allow read: if true;
+      allow write: if request.auth.uid == userId; 
+      
+      match /collectedCards/{userCardId} { 
+        allow read, write: if request.auth.uid == userId; 
+      }
+    }
+  }
+}
